@@ -1,6 +1,6 @@
 # models.py
 
-from main import db
+from database import db
 from datetime import datetime
 
 # Tabela auxiliar para a relação muitos-para-muitos entre User e Post (likes)
