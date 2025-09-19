@@ -6,6 +6,8 @@ from flask_sqlalchemy import SQLAlchemy
 from os import name
 app = Flask (__name__)
 
+app.config['SECRET_KEY'] = 'uma-chave-secreta-muito-dificil-de-adivinhar'
+
 # 1. Define o caminho para o arquivo do banco de dados
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
 
