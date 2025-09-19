@@ -1,24 +1,29 @@
+# main.py
+
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+# 1. Importe o 'db' do nosso novo arquivo
+from database import db
 
-# pip install -r requirements.txt
+# Cria a instância da aplicação
+app = Flask(__name__)
 
-from os import name
-app = Flask (__name__)
-
+# --- Configurações ---
 app.config['SECRET_KEY'] = 'uma-chave-secreta-muito-dificil-de-adivinhar'
-
-# 1. Define o caminho para o arquivo do banco de dados
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
-
-# 2. Desativa uma funcionalidade do SQLAlchemy que emite avisos (não vou usar)
+# Corrigindo o caminho para a pasta instance, que o Flask cria automaticamente
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db' 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# 3. Cria a instância do banco de dados, ligando-a ao nosso app.
-db = SQLAlchemy(app)
+# 2. Conecta a instância 'db' com a nossa aplicação 'app'
+#    Isso é feito DEPOIS de todas as configurações do app.
+db.init_app(app)
 
-from models import *
-from routes import *
+# 3. Agora que 'app' e 'db' estão totalmente configurados, podemos importar
+#    os arquivos que dependem deles sem causar um ciclo.
+with app.app_context():
+    from models import *
+    from routes import *
+    # Se precisar criar as tabelas aqui (opcional)
+    # db.create_all() 
 
 if __name__ == "__main__":
     app.run()
