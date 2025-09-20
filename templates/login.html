@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+    <div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset>
+                <legend>Login</legend>
+                <div>
+                    {{ form.email.label }}<br>
+                    {{ form.email(size=30) }}
+                </div>
+                <div>
+                    {{ form.senha.label }}<br>
+                    {{ form.senha(size=30) }}
+                </div>
+                <div>
+                    {{ form.lembrar_me() }}
+                    {{ form.lembrar_me.label }}
+                </div>
+            </fieldset>
+            <div>
+                {{ form.submit() }}
+            </div>
+        </form>
+        <div>
+            <small>
+                Não tem uma conta? <a href="{{ url_for('register') }}">Registre-se</a>
+            </small>
+        </div>
+    </div>
+</body>
+</html>
