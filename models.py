@@ -1,7 +1,6 @@
-# models.py
-
 from database import db
 from datetime import datetime
+from flask_login import UserMixin # O Flask-Login exige que o User herde de uma classe especial chamada UserMixin.
 
 # Tabela auxiliar para a relação muitos-para-muitos entre User e Post (likes)
 # Esta não é uma classe de modelo, mas uma tabela de associação.
@@ -12,7 +11,7 @@ likes = db.Table('likes',
 
 # Tabela: user
 # Corresponde à classe User em Python
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(255), nullable=False)
     sobrenome = db.Column(db.String(255), nullable=False)
