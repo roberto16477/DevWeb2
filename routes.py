@@ -3,7 +3,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from main import app
 from database import db
 from models import User, Post
-from forms import RegistrationForm # Importe seu novo formulário
+from flask_login import login_user, current_user, logout_user, login_required
+from forms import RegistrationForm, LoginForm
 
 
 #rotas
@@ -41,3 +42,32 @@ def register():
     
     # Se for a primeira vez que o usuário acessa a página (GET), apenas mostra o formulário
     return render_template('register.html', title='Registrar', form=form)
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    # Se o usuário já estiver logado, redireciona para a homepage
+    if current_user.is_authenticated:
+        return redirect(url_for('homepage'))
+    
+    form = LoginForm()
+    if form.validate_on_submit():
+        # Busca o usuário no banco de dados pelo email
+        user = User.query.filter_by(email=form.email.data).first()
+        
+        # Verifica se o usuário existe e se a senha está correta
+        if user and check_password_hash(user.senha, form.senha.data):
+            login_user(user, remember=form.lembrar_me.data)
+            flash('Login realizado com sucesso!', 'success')
+            # Redireciona para a página que o usuário tentava acessar, ou para a homepage
+            next_page = request.args.get('next')
+            return redirect(next_page) if next_page else redirect(url_for('homepage'))
+        else:
+            flash('Login sem sucesso. Por favor, verifique o email e a senha.', 'danger')
+            
+    return render_template('login.html', title='Login', form=form)
+
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for('homepage'))
