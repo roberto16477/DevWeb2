@@ -1,8 +1,6 @@
-# main.py
-
 from flask import Flask
-# 1. Importe o 'db' do nosso novo arquivo
 from database import db
+from flask_login import LoginManager
 
 # Cria a instância da aplicação
 app = Flask(__name__)
@@ -13,17 +11,25 @@ app.config['SECRET_KEY'] = 'uma-chave-secreta-muito-dificil-de-adivinhar'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db' 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# 2. Conecta a instância 'db' com a nossa aplicação 'app'
-#    Isso é feito DEPOIS de todas as configurações do app.
+# Conecta a instância 'db' com a nossa aplicação 'app'
+# Isso é feito DEPOIS de todas as configurações do app.
 db.init_app(app)
 
-# 3. Agora que 'app' e 'db' estão totalmente configurados, podemos importar
-#    os arquivos que dependem deles sem causar um ciclo.
+# Criando e configurando o gerenciador de login
+login_manager = LoginManager(app)
+login_manager.login_view = 'login' # Informa qual é a rota de login
+login_manager.login_message_category = 'info' # Categoria da mensagem flash
+
+#Agora que 'app' e 'db' estão totalmente configurados, podemos importar os arquivos que dependem deles sem causar um ciclo.
 with app.app_context():
     from models import *
-    from routes import *
-    # Se precisar criar as tabelas aqui (opcional)
-    # db.create_all() 
+
+    # Esta função é usada pelo Flask-Login para recarregar o objeto do usuário, a partir do ID de usuário armazenado na sessão.
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+
+    from routes import * 
 
 if __name__ == "__main__":
     app.run()
