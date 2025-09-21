@@ -4,7 +4,7 @@ from main import app
 from database import db
 from models import User, Post
 from flask_login import login_user, current_user, logout_user, login_required
-from forms import RegistrationForm, LoginForm
+from forms import RegistrationForm, LoginForm, UpdateProfileForm
 
 
 #rotas
@@ -77,3 +77,23 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('homepage'))
+
+@app.route("/perfil", methods=['GET', 'POST'])
+@login_required # Protege a rota, só usuários logados podem acessar
+def perfil():
+    form = UpdateProfileForm()
+    # Se o formulário for enviado e validado
+    if form.validate_on_submit():
+        current_user.nome = form.nome.data
+        current_user.sobrenome = form.sobrenome.data
+        current_user.email = form.email.data
+        current_user.biografia = form.biografia.data
+        db.session.commit()
+        return redirect(url_for('perfil'))
+    # Se for a primeira vez que a página é carregada
+    elif request.method == 'GET':
+        form.nome.data = current_user.nome
+        form.sobrenome.data = current_user.sobrenome
+        form.email.data = current_user.email
+        form.biografia.data = current_user.biografia
+    return render_template('perfil.html', title='Meu Perfil', form=form)

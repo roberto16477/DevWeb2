@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('homepage') }}">Home</a>
+        <a href="{{ url_for('perfil') }}">Meu Perfil</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+        <hr>
+    </header>
+
+    <main>
+        <div>
+            <h2>Informações do Perfil</h2>
+            <p>Email: {{ current_user.email }}</p>
+            <p>Membro desde: {{ current_user.data_registro.strftime('%d/%m/%Y') }}</p>
+        </div>
+
+        <hr>
+
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset>
+                <legend>Atualizar Informações</legend>
+                <div>
+                    {{ form.nome.label }}<br>
+                    {{ form.nome(size=30) }}
+                </div>
+                <div>
+                    {{ form.sobrenome.label }}<br>
+                    {{ form.sobrenome(size=30) }}
+                </div>
+                <div>
+                    {{ form.email.label }}<br>
+                    {{ form.email(size=30) }}
+                </div>
+                <div>
+                    {{ form.biografia.label }}<br>
+                    {{ form.biografia(rows=5, cols=30) }}
+                </div>
+            </fieldset>
+            <div>
+                {{ form.submit() }}
+            </div>
+        </form>
+    </main>
+</body>
+</html>
