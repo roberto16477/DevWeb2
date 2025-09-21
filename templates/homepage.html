@@ -30,6 +30,41 @@
         {% endwith %}
 
         {% block content %}{% endblock %}
+
+        <h1>Posts Recentes</h1>
+
+        {% if current_user.is_authenticated %}
+            <div>
+                <a href="{{ url_for('new_post') }}">Criar Novo Post</a>
+            </div>
+            <hr>
+        {% endif %}
+
+        {% for post in posts %}
+            <article>
+                <h2>{{ post.titulo }}</h2>
+                <p>
+                    Por {{ post.author.nome }} {{ post.author.sobrenome }} 
+                    em {{ post.data_criacao.strftime('%d/%m/%Y') }}
+                </p>
+                <p>{{ post.corpo }}</p>
+
+                {% if post.author == current_user %}
+                    <div style="display: flex; gap: 10px; margin-top: 10px;">
+                        <a href="{{ url_for('update_post', post_id=post.id) }}">Editar</a>
+                        
+                        <form action="{{ url_for('delete_post', post_id=post.id) }}" method="POST">
+                            <input type="submit" value="Deletar" 
+                                   onclick="return confirm('Tem certeza que deseja deletar este post? Esta ação não pode ser desfeita.')">
+                        </form>
+                    </div>
+                {% endif %}
+            </article>
+            <hr>
+        {% else %}
+            <p>Ainda não há posts no blog.</p>
+        {% endfor %}
+
     </main>
     <p>Meu site no flask</p>
 </body>

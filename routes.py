@@ -1,4 +1,4 @@
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 from main import app
 from database import db
@@ -15,8 +15,10 @@ def index():
 
 @app.route("/home")
 def homepage():
-    # A sua antiga homepage agora vive exclusivamente na rota /home.
-    return render_template('homepage.html', title='Página Inicial')
+    # Busca todos os posts no banco de dados, ordenando pelos mais recentes
+    posts = Post.query.order_by(Post.data_criacao.desc()).all()
+    # Passa a lista de posts para o template
+    return render_template('homepage.html', title='Página Inicial', posts=posts)
 
 @app.route("/blog")
 def blog():
@@ -43,8 +45,8 @@ def register():
         # Mostra uma mensagem de sucesso
         flash(f'Conta criada com sucesso para {form.nome.data}!', 'success')
         
-        # Redireciona o usuário para a página de login (ou outra página)
-        return redirect(url_for('homepage')) # Supondo que você tenha uma rota 'homepage'
+        # Redireciona o usuário para a página de login
+        return redirect(url_for('login')) 
     
     # Se for a primeira vez que o usuário acessa a página (GET), apenas mostra o formulário
     return render_template('register.html', title='Registrar', form=form)
@@ -126,3 +128,49 @@ def new_post():
         # Redireciona para a homepage para ver o novo post
         return redirect(url_for('homepage'))
     return render_template('create_post.html', title='Novo Post', form=form)
+
+@app.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
+@login_required
+def update_post(post_id):
+    # Busca o post pelo ID ou retorna um erro 404 (Não Encontrado) se não existir
+    post = Post.query.get_or_404(post_id)
+    
+    # VERIFICAÇÃO DE SEGURANÇA:
+    # Se o autor do post for diferente do usuário logado, exibe um erro 403 (Proibido)
+    if post.author != current_user:
+        abort(403)
+        
+    form = PostForm()
+    # Se o formulário for enviado e validado
+    if form.validate_on_submit():
+        post.titulo = form.titulo.data
+        post.corpo = form.corpo.data
+        db.session.commit() # Não precisa de 'add', pois o post já está no banco
+        return redirect(url_for('homepage'))
+    # Se for a primeira vez que a página é carregada (GET)
+    elif request.method == 'GET':
+        # Preenche o formulário com os dados atuais do post
+        form.titulo.data = post.titulo
+        form.corpo.data = post.corpo
+        
+    # Usa o mesmo template de criação, mas passa uma legenda diferente
+    return render_template('create_post.html', title='Editar Post',
+                           form=form, legend='Editar Post')
+
+@app.route("/post/<int:post_id>/delete", methods=['POST'])
+@login_required
+def delete_post(post_id):
+    # Busca o post pelo ID ou retorna um erro 404 se não existir
+    post = Post.query.get_or_404(post_id)
+    
+    # VERIFICAÇÃO DE SEGURANÇA:
+    # Garante que o usuário logado é o autor do post
+    if post.author != current_user:
+        abort(403) # Erro de 'Proibido'
+        
+    # Apaga o post do banco de dados
+    db.session.delete(post)
+    db.session.commit()
+    
+    # Redireciona de volta para a homepage
+    return redirect(url_for('homepage'))

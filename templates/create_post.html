@@ -16,7 +16,7 @@
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset>
-                <legend>Criar Novo Post</legend>
+                <legend>{{ legend or 'Criar Novo Post' }}</legend>
                 <div>
                     {{ form.titulo.label }}<br>
                     {{ form.titulo(size=50) }}
