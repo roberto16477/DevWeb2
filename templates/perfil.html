@@ -46,6 +46,16 @@
                 {{ form.submit() }}
             </div>
         </form>
+
+         <div>
+            <h3>Zona de Perigo</h3>
+            <p>Uma vez que você exclua sua conta, não há como voltar atrás. Por favor, tenha certeza.</p>
+            
+            <form action="{{ url_for('delete_profile') }}" method="POST">
+                <input type="submit" value="Excluir Minha Conta Permanentemente" 
+                       onclick="return confirm('Você tem CERTEZA que deseja excluir sua conta? Todos os seus posts e dados serão apagados para sempre.');">
+            </form>
+        </div>
     </main>
 </body>
 </html>

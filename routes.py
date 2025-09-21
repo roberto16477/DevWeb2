@@ -97,3 +97,19 @@ def perfil():
         form.email.data = current_user.email
         form.biografia.data = current_user.biografia
     return render_template('perfil.html', title='Meu Perfil', form=form)
+
+@app.route('/delete_profile', methods=['POST'])
+@login_required
+def delete_profile():
+    # Pega o usuário que está logado no momento
+    user_to_delete = User.query.get(current_user.id)
+    
+    # Faz o logout do usuário para invalidar a sessão
+    logout_user()
+    
+    # Apaga o usuário do banco de dados
+    db.session.delete(user_to_delete)
+    db.session.commit()
+    
+    # Redireciona para a página principal
+    return redirect(url_for('index'))
