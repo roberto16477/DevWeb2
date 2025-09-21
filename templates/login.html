@@ -6,8 +6,18 @@
 </head>
 <body>
     <div>
-        {% extends "mensa.html" %} {% block content %} <form method="POST" action="">
-        {{ form.hidden_tag() }} <!-- Chamada das mensagens-->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
             <fieldset>
                 <legend>Login</legend>
                 <div>
