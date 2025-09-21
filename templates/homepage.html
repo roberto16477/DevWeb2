@@ -6,6 +6,14 @@
     <title>Homepage</title>
 </head>
 <body>
-    <p>Meu site no flask com html</p>
+    {% extends "base.html" %} {% block content %} <h1>Bem-vindo ao Meu Blog!</h1>
+    
+    {% if current_user.is_authenticated %}
+        <p>Olá, {{ current_user.nome }}! Você está logado.</p>
+    {% else %}
+        <p>Você não está logado. Faça o <a href="{{ url_for('login') }}">login</a> ou <a href="{{ url_for('register') }}">registre-se</a>.</p>
+    {% endif %}
+
+{% endblock content %} ```
 </body>
 </html>

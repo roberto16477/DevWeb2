@@ -10,7 +10,7 @@ from forms import RegistrationForm, LoginForm
 #rotas
 @app.route("/")
 def homepage():
-    return render_template("homepage.html")
+    return render_template('homepage.html', title='Página Inicial')
 
 @app.route("/blog")
 def blog():
