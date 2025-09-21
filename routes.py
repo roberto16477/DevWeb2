@@ -9,7 +9,13 @@ from forms import RegistrationForm, LoginForm
 
 #rotas
 @app.route("/")
+def index():
+    # url_for('login') encontra a URL da função chamada 'login'.
+    return redirect(url_for('login'))
+
+@app.route("/home")
 def homepage():
+    # A sua antiga homepage agora vive exclusivamente na rota /home.
     return render_template('homepage.html', title='Página Inicial')
 
 @app.route("/blog")
