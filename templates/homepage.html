@@ -6,7 +6,7 @@
     <title>Homepage</title>
 </head>
 <body>
-    {% extends "base.html" %} {% block content %} <h1>Bem-vindo ao Meu Blog!</h1>
+    {% extends "mensa.html" %} {% block content %} <h1>Bem-vindo ao Meu Blog!</h1>
     
     {% if current_user.is_authenticated %}
         <p>Olá, {{ current_user.nome }}! Você está logado.</p>
