@@ -45,3 +45,8 @@ class UpdateProfileForm(FlaskForm):
             user = User.query.filter_by(email=email.data).first()
             if user:
                 raise ValidationError('Este email já está em uso. Por favor, escolha outro.')
+
+class PostForm(FlaskForm):
+    titulo = StringField('Título', validators=[DataRequired()])
+    corpo = TextAreaField('Conteúdo', validators=[DataRequired()])
+    submit = SubmitField('Publicar Post')

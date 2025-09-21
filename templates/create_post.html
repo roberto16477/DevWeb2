@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('homepage') }}">Home</a>
+        <a href="{{ url_for('perfil') }}">Meu Perfil</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+        <hr>
+    </header>
+
+    <main>
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset>
+                <legend>Criar Novo Post</legend>
+                <div>
+                    {{ form.titulo.label }}<br>
+                    {{ form.titulo(size=50) }}
+                </div>
+                <div>
+                    {{ form.corpo.label }}<br>
+                    {{ form.corpo(rows=10, cols=50) }}
+                </div>
+            </fieldset>
+            <div>
+                {{ form.submit() }}
+            </div>
+        </form>
+    </main>
+</body>
+</html>

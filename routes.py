@@ -4,7 +4,7 @@ from main import app
 from database import db
 from models import User, Post
 from flask_login import login_user, current_user, logout_user, login_required
-from forms import RegistrationForm, LoginForm, UpdateProfileForm
+from forms import RegistrationForm, LoginForm, UpdateProfileForm, PostForm
 
 
 #rotas
@@ -113,3 +113,16 @@ def delete_profile():
     
     # Redireciona para a página principal
     return redirect(url_for('index'))
+
+@app.route("/post/new", methods=['GET', 'POST'])
+@login_required # Apenas usuários logados podem criar posts
+def new_post():
+    form = PostForm()
+    if form.validate_on_submit():
+        # Cria um novo post com os dados do formulário e o autor logado
+        post = Post(titulo=form.titulo.data, corpo=form.corpo.data, author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        # Redireciona para a homepage para ver o novo post
+        return redirect(url_for('homepage'))
+    return render_template('create_post.html', title='Novo Post', form=form)
