@@ -76,7 +76,7 @@ def login():
 @app.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for('homepage'))
+    return redirect(url_for('login'))
 
 @app.route("/perfil", methods=['GET', 'POST'])
 @login_required # Protege a rota, só usuários logados podem acessar
