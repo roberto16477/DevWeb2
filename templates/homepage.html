@@ -6,6 +6,8 @@
     <title>Homepage</title>
 </head>
 <body>
+    {% extends "mensa.html" %} {% block content %} <form method="POST" action="">
+        {{ form.hidden_tag() }} <!-- Chamada das mensagens-->
     <p>Meu site no flask com html</p>
 </body>
 </html>
