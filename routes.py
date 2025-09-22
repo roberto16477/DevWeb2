@@ -174,3 +174,19 @@ def delete_post(post_id):
     
     # Redireciona de volta para a homepage
     return redirect(url_for('homepage'))
+
+@app.route("/post/<int:post_id>/like", methods=['POST'])
+@login_required
+def like_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    
+    # Verifica se o usuário já curtiu o post
+    if current_user in post.liked_by:
+        # Se já curtiu, remove o like (descurtir)
+        post.liked_by.remove(current_user)
+    else:
+        # Se não curtiu, adiciona o like
+        post.liked_by.append(current_user)
+        
+    db.session.commit()
+    return redirect(url_for('homepage'))

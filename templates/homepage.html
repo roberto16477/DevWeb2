@@ -48,6 +48,20 @@
                     em {{ post.data_criacao.strftime('%d/%m/%Y') }}
                 </p>
                 <p>{{ post.corpo }}</p>
+                
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <span>{{ post.liked_by | length }} curtidas</span>
+
+                    {% if current_user.is_authenticated %}
+                        <form action="{{ url_for('like_post', post_id=post.id) }}" method="POST">
+                            {% if current_user in post.liked_by %}
+                                <input type="submit" value="Descurtir">
+                            {% else %}
+                                <input type="submit" value="Curtir">
+                            {% endif %}
+                        </form>
+                    {% endif %}
+                </div>
 
                 {% if post.author == current_user %}
                     <div style="display: flex; gap: 10px; margin-top: 10px;">
@@ -66,6 +80,5 @@
         {% endfor %}
 
     </main>
-    <p>Meu site no flask</p>
 </body>
 </html>
