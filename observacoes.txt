@@ -1,0 +1,29 @@
+O que foi feito:
+
+Como nunca tinha feito nada de programação web com python, fui atrás das tecnologias que eu precisaria usar. Com uma consulta ao Gemini,
+ao dizer que eu desejava utilizar Python, ele me recomendou utilizar Flask e Sqlite, pela facilidade de implementação desse conjunto. O professor
+me confirmou que realmente era um bom caminho, então foi o que utilizei.
+
+Primeiro fiz uma homepage bem simples apenas para testar o uso do flask. Em seguida passei o banco de dados de exemplo inicial (que estava
+em MariaDB) para Sqlite. Chamei esse banco de dados de blog.db e coloquei dentro de uma pasta chamada instance (Por ser uma boa prática 
+e ser padrão do flask). Criei em seguida o meu models.py onde defini as classes User e Post.
+
+O segundo passo foi criar uma tela de login, como desejava que essa fosse a primeira página que o usuário acessasse, alterei a rota no meu
+arquivo routes.py para que essa fosse minha rota principal. Criei então um formulário de criação de usuário, para que eu pudesse criar um
+usuário e testar o login. Depois de criado o formulário de cadastro, cadastrei um usuário e consegui logar com sucesso. Inicialmente fiz isso
+sem criptografar a senha, mas depois ví que era algo simples de fazer com o flask e implementei.
+
+Depois de criar usuários, fiz as demais funções relacionadas aos usuários: Alterar dados de um usuário (perfil) e deletar um usuário.
+
+Depois de finalizar as funções de usuário, criei as funções de Post (Criar, editar e deletar). Ao criar um post, garanti que ele seja exibido na homepage
+com todos os dados (quem postou, quando postou, conteúdo do post).
+
+Depois de criar os posts, fiz o sistema de likes (toggle).
+
+Com isso, deixei o blog com uma aparência bem simples, praticamente não formatei muita coisa, mas com as funções principais implementadas.
+
+
+
+Experiência:
+Como foi a primeira vez em muito tempo que fiz algo parecido com um blog, as rotas e formulários foram um pouco "novidade". Além de ser
+a primeira vez usando flask, que tem bastante funções e funcionalidades que ainda não consigo usar plenamente.
